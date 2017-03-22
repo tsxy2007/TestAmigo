@@ -8,6 +8,7 @@
 #include <vector>
 #include <stack>
 #include "AVLTree.h"
+#include "RB_Tree.h"
 #define random(x) (rand()%x)
 using namespace std;
 class X{ };
@@ -1216,13 +1217,20 @@ void main()
 	////show(tmpArr, 6);
 
 	int len = 10;
-	AvlTree<int> avlTree;
+	RB_Tree<int,int> rbTree;
 	for (int i = 0; i < len;i++)
 	{
-		avlTree.insert(avlTree.root, i);
-		avlTree.c_travl();
+		rbTree.Insert( i,i );
 	}
-	avlTree.printTree();
+	rbTree.printTree();
+	//int len = 10;
+	//AvlTree<int> avlTree;
+	//for (int i = 0; i < len;i++)
+	//{
+	//	avlTree.insert(avlTree.root, i);
+	//	avlTree.c_travl();
+	//}
+	//avlTree.printTree();
 
 	//AVLNode<int>* vNode = avlTree.find_t(31);
 	//if (vNode)
@@ -1233,9 +1241,9 @@ void main()
 	//avlTree.travl_c();
 	////avlTree.c_travl();
 	//avlTree.h_travl();
-	avlTree.c_travl();
-	avlTree.Delete(3);
-	avlTree.c_travl();
+	//avlTree.c_travl();
+	//avlTree.Delete(3);
+	//avlTree.c_travl();
 
 	//std::default_random_engine e;
 	//std::uniform_int_distribution <> u(0, len);
