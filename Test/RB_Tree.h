@@ -1,9 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include <stirng>
+//#include <stirng>
 #include <sstream>
 #include <fstream>
+#include <vector>
 using namespace std;
 
 template<class KEY , class U>
@@ -13,7 +14,8 @@ private:
 	RB_Tree( const RB_Tree& input ) {};
 	const RB_Tree& operator= (const RB_Tree& input) {}
 private:
-	enum COLOR { RED,BLACK };
+	enum COLOR { RED, BLACK };
+private:
 	class RB_Node
 	{
 	public:
@@ -22,17 +24,18 @@ private:
 			right = NULL;
 			left = NULL;
 			parent = NULL;
-		}
+		};
 		COLOR RB_COLOR;
 		RB_Node* right;
 		RB_Node* left;
 		RB_Node* parent;
 		KEY key;
 		U   data;
-	private:
-		RB_Node* m_root;
-		RB_Node* m_nullNode;
-	public:
+	};
+private:
+	RB_Node* m_root;
+	RB_Node* m_nullNode;
+public:
 		RB_Tree()
 		{
 			this->m_nullNode = new RB_Node;
@@ -80,7 +83,7 @@ private:
 
 			RB_Node* insert_node = new RB_Node;
 			insert_node->key = key;
-			insert_node->RB_COLOR = BLACK;
+			insert_node->RB_COLOR = RED;
 			insert_node->data = data;
 			insert_node->right = m_nullNode;
 			insert_node->left = m_nullNode;
@@ -89,13 +92,13 @@ private:
 			{
 				m_root = insert_node;
 				m_root->parent = m_nullNode;
-				m_root->left = m_root;
-				m_root->right = m_root;
-				m_root->parent = m_root;
+				m_nullNode->left = m_root;
+				m_nullNode->right = m_root;
+				m_nullNode->parent = m_root;
 			}
 			else
 			{
-				if (key > insert_node->key)
+				if (key > insert_point->key)
 					insert_point->right = insert_node;
 				else
 					insert_point->left = insert_node;
@@ -110,7 +113,7 @@ private:
 		{
 			while (node->parent->RB_COLOR == RED)
 			{
-				if (node->parent == node->parent->parent->left)
+				if (node->parent == node->parent->parent->left)  // 父节点是祖父节点的左孩子
 				{
 					RB_Node* uncle = node->parent->parent->right;
 					if (uncle->RB_COLOR == RED)
@@ -129,10 +132,10 @@ private:
 						}
 						node->parent->RB_COLOR = BLACK;
 						node->parent->parent->RB_COLOR = RED;
-						RotateRight(node->parent->parent) //右旋
+						RotateRight(node->parent->parent); //右旋
 					}
 				}
-				else
+				else  // 父节点是祖父节点的右孩子
 				{
 					RB_Node* uncle = node->parent->parent->left;
 					if (uncle->RB_COLOR == RED)
@@ -211,6 +214,26 @@ private:
 			lower_left->right = node;
 		}
 		
-
-	};
+		void printTree()
+		{
+			RB_Node* iter = NULL;
+			vector<RB_Node*> s;
+			s.push_back(m_root);
+			int cur = 0, size = s.size();
+			while(cur < size)
+			{ 
+				while (cur < size)
+				{
+					iter = s[cur];
+					cout << iter->key << " ";
+					if (iter->right != m_nullNode)
+						s.push_back(iter->right);
+					if (iter->left != m_nullNode)
+						s.push_back(iter->left);
+					cur++;
+				}
+				size = s.size();
+				cout << endl;
+			}
+		}
 };
