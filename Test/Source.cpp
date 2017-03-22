@@ -1220,7 +1220,7 @@ void main()
 	RB_Tree<int,int> rbTree;
 	for (int i = 0; i < len;i++)
 	{
-		rbTree.Insert( i,i );
+		rbTree.Insert( 10-i,i );
 	}
 	rbTree.printTree();
 	//int len = 10;

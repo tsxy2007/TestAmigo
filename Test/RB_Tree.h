@@ -105,37 +105,41 @@ public:
 				insert_node->parent = insert_point;
 			}
 
-			InsertFixup(insert_node);
+			InsertFixUp(insert_node);
 		}
 
 		// 插入修复红黑树
-		void InsertFixup(RB_Node* node)
+		void InsertFixUp(RB_Node* node)
 		{
 			while (node->parent->RB_COLOR == RED)
 			{
-				if (node->parent == node->parent->parent->left)  // 父节点是祖父节点的左孩子
+				if (node->parent == node->parent->parent->left)   //    
 				{
 					RB_Node* uncle = node->parent->parent->right;
-					if (uncle->RB_COLOR == RED)
+					if (uncle->RB_COLOR == RED)   //插入情况1，z的叔叔y是红色的。    
 					{
 						node->parent->RB_COLOR = BLACK;
 						uncle->RB_COLOR = BLACK;
-						uncle->parent->parent->RB_COLOR = RED;
+						node->parent->parent->RB_COLOR = RED;
 						node = node->parent->parent;
 					}
-					else if (uncle->RB_COLOR == BLACK)
+					else if (uncle->RB_COLOR == BLACK)  //插入情况2：z的叔叔y是黑色的，。    
 					{
-						if (node == node->parent->right)
+						if (node == node->parent->right) //且z是右孩子    
 						{
 							node = node->parent;
-							RoateLeft(node);//左旋
+							RotateLeft(node);
 						}
+						//else                 //插入情况3：z的叔叔y是黑色的，但z是左孩子。    
+						//{    
 						node->parent->RB_COLOR = BLACK;
 						node->parent->parent->RB_COLOR = RED;
-						RotateRight(node->parent->parent); //右旋
+						RotateRight(node->parent->parent);
+						//}  
 					}
 				}
-				else  // 父节点是祖父节点的右孩子
+				else //这部分是针对为插入情况1中，z的父亲现在作为祖父的右孩子了的情况，而写的。    
+					 //15 else (same as then clause with "right" and "left" exchanged)    
 				{
 					RB_Node* uncle = node->parent->parent->left;
 					if (uncle->RB_COLOR == RED)
@@ -150,19 +154,21 @@ public:
 						if (node == node->parent->left)
 						{
 							node = node->parent;
-							RotateRight(node);
+							RotateRight(node);     //与上述代码相比，左旋改为右旋    
 						}
+						//else    
+						//{    
 						node->parent->RB_COLOR = BLACK;
 						node->parent->parent->RB_COLOR = RED;
-						RoateLeft(node->parent->parent);
+						RotateLeft(node->parent->parent);   //右旋改为左旋，即可。    
+															//}    
 					}
 				}
-
 			}
 			m_root->RB_COLOR = BLACK;
 		}
 		// 左旋
-		bool RoateLeft(RB_Node* node)
+		bool RotateLeft(RB_Node* node)
 		{
 			if (node == m_nullNode || node->right == m_nullNode)
 				return false;
