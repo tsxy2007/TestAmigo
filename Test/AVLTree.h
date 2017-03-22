@@ -35,9 +35,13 @@ public:
 	void h_travl();
 	//删除
 	void Delete(T value);
+	//最小值结点
+	 AVLNode<T> *FindMin(AVLNode<T> *t) const;
+	//最大值结点
+	AVLNode<T> *FindMax(AVLNode<T> *t) const;
 private:
 	//删除
-	void Delete(AVLNode<T>* p,T value);
+	void Delete(AVLNode<T>* &p,T value);
 	void travl_c(AVLNode<T>* t);
 	int GetHeight(AVLNode<T>* t);
 	AVLNode<T>* LL(AVLNode<T>* t);
@@ -47,73 +51,97 @@ private:
 };
 
 template < typename T>
-void AvlTree<T>::Delete(AVLNode<T>* p, T value)
+AVLNode<T> * AvlTree<T>::FindMax(AVLNode<T> *t) const
+{
+	AVLNode<T>* cur = t , * pre = NULL;
+
+	while (cur)
+	{
+		pre = cur;
+		cur = cur->pRight;
+	}
+	return pre;
+}
+
+template < typename T>
+AVLNode<T> * AvlTree<T>::FindMin(AVLNode<T> *t) const
+{
+	AVLNode<T>* cur = t, *pre = NULL;
+
+	while (cur)
+	{
+		pre = cur;
+		cur = cur->pLeft;
+	}
+	return pre;
+}
+
+template < typename T>
+void AvlTree<T>::Delete(AVLNode<T>* &p, T value)
 {
 	if (p == NULL)
 		return;
-	if ( value < p->iValue )
+	else if ( p->iValue == value )
 	{
-		Delete(p->pLeft, value);
-		if (GetHeight(p->pRight) - GetHeight(p->pLeft) > 1)
+		
+		if (p->pLeft != NULL && p->pRight != NULL)
 		{
-			if (p->pRight->pLeft != NULL && (GetHeight(p->pRight->pLeft)> GetHeight( p->pRight->pRight )))
-				p = RL(p);
-			else
-				p = RR(p);
+			//左子树高度大，删除左子树中值最大的结点，将其赋给根结点
+			if (GetHeight(p->pLeft) > GetHeight(p->pRight))
+			{
+				p->iValue = FindMax(p->pLeft)->iValue;
+				Delete(p->pLeft, p->iValue);
+			}
+			else//右子树高度更大，删除右子树中值最小的结点，将其赋给根结点
+			{
+				p->iValue = FindMin(p->pRight)->iValue;
+				Delete(p->pRight, p->iValue);
+			}
 		}
-			
-	}
-	else if ( value > p->iValue)
-	{
-		Delete(p->pRight, value);
-		if (GetHeight(p->pLeft) - GetHeight(p->pRight) > 1)
+		else//左右子树有一个不为空，直接用需要删除的结点的子结点替换即可
 		{
-			if (p->pLeft->pRight != NULL && (GetHeight(p->pLeft->pLeft) > GetHeight(p->pLeft->pRight)))
+			AVLNode<T>* old = p;
+
+			p = p->pLeft ? p->pLeft : p->pRight;
+			delete old;
+			old = NULL;
+		}
+	}
+	else if ( value < p->iValue) // 删除的节点在左子树上
+	{
+		//递归删除左子树上的节点
+		Delete(p->pLeft, value);
+		//判断是否仍然满足平衡条件
+		 if ( GetHeight(p->pRight) - GetHeight(p->pLeft) > 1 )
+		 {
+			 if (GetHeight(p->pRight->pLeft) > GetHeight(p->pRight->pRight))
+				 p = RL(p);
+			 else
+				 p = RR(p);
+		 }
+		 else //满足平衡条件 调整高度
+		 {
+			 p->height = max(GetHeight(p->pLeft), GetHeight(p->pRight)) + 1;
+		 }
+	}
+	else // 删除的节点在右子树上
+	{
+		//递归删除右子树
+		Delete(p->pRight, value);
+		//删除之后判断平衡情况
+		if ( GetHeight(p->pLeft) - GetHeight(p->pRight) > 1 )
+		{
+			if (GetHeight(p->pLeft->pRight) > GetHeight(p->pLeft->pLeft))
 				p = LR(p);
 			else
 				p = LL(p);
 		}
-			
-	}
-	else
-	{
-		if (p->pLeft && p->pRight)
+		else //满足平衡
 		{
-			AVLNode<T>* temp = p->pLeft; // 指向节点的右孩子
-			//AVLNode<T>* q = p;
-			while (temp->pRight)
-			{
-				//q = temp;
-				temp = temp->pRight;
-			}
-			p->iValue = temp->iValue;
-			Delete(p->pLeft, temp->iValue); //删除左树中最大节点
-			if (GetHeight(p->pRight) - GetHeight(p->pLeft) > 1) 
-			{
-				if (p->pRight->pLeft != NULL&& GetHeight(p->pRight->pLeft) > GetHeight(p->pRight->pRight) )
-					p = RL(p);
-				else
-					p = RR(p);
-			}
-
+			p->height = max(GetHeight(p->pLeft), GetHeight(p->pRight)) + 1;
 		}
-		else
-		{
-			AVLNode<T>* temp = p;
-			if (p->pLeft == NULL)
-				p = p->pRight;
-			else if (p->pRight == NULL)
-				p = p->pLeft;
-			delete(temp);
-			temp = NULL;
-			
-		}
-
-		if (p == NULL)
-			return;
-		p->height = max(GetHeight(p->pLeft), GetHeight(p->pRight)) + 1;
-		return;
 	}
+	return;
 }
 
 template < typename T>
