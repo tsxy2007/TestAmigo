@@ -57,7 +57,7 @@ public:
 			{
 				if (key < index->key)
 					index = index->left;
-				else if (key > index->right)
+				else if (key > index->key)
 					index = index->right;
 				else
 					return index;
@@ -167,32 +167,42 @@ public:
 			}
 			m_root->RB_COLOR = BLACK;
 		}
-		// 左旋
+		//左旋代码实现    
 		bool RotateLeft(RB_Node* node)
 		{
 			if (node == m_nullNode || node->right == m_nullNode)
-				return false;
+			{
+				return false;//can't rotate    
+			}
 			RB_Node* lower_right = node->right;
 			lower_right->parent = node->parent;
 			node->right = lower_right->left;
-			if (lower_right->left != m_nullNode) // 右孩子的左孩子存在
+			if (lower_right->left != m_nullNode)
+			{
 				lower_right->left->parent = node;
-			if (node->parent == m_nullNode) 
+			}
+			if (node->parent == m_nullNode) //rotate node is root    
 			{
 				m_root = lower_right;
 				m_nullNode->left = m_root;
 				m_nullNode->right = m_root;
+				//m_nullNode->parent = m_root;    
 			}
 			else
 			{
 				if (node == node->parent->left)
+				{
 					node->parent->left = lower_right;
+				}
 				else
+				{
 					node->parent->right = lower_right;
+				}
 			}
 			node->parent = lower_right;
 			lower_right->left = node;
 		}
+
 		// 右旋
 		bool RotateRight(RB_Node* node)
 		{
@@ -200,7 +210,7 @@ public:
 				return false;
 			RB_Node* lower_left = node->left; // 该节点的左叶子
 			lower_left->parent = node->parent; // 该节点的父节点赋值给左叶子节点的父节点
-			node->left = lower_left->left;
+			node->left = lower_left->right;
 			if (lower_left->right != m_nullNode)
 				lower_left->right->parent = node;
 			if ( node->parent == m_nullNode )
@@ -218,6 +228,7 @@ public:
 			}
 			node->parent = lower_left;
 			lower_left->right = node;
+			return true;
 		}
 		
 		void printTree()
@@ -242,4 +253,185 @@ public:
 				cout << endl;
 			}
 		}
+
+		bool Delete(KEY key)
+		{
+			RB_Node* delete_point = this->find(key);
+			if (delete_point == m_nullNode)
+				return false;
+			if (delete_point->left != m_nullNode && delete_point->right != m_nullNode) //删除节点左右不为空
+			{
+				RB_Node* successor = InOrderSuccessor(delete_point);
+				delete_point->data = successor->data;
+				delete_point->key = successor->key;
+				delete_point = successor;
+			}
+			RB_Node* delete_point_child;
+			if (delete_point->right != m_nullNode)
+			{
+				delete_point_child = delete_point->right;
+			}
+			else if ( delete_point->left != m_nullNode)
+			{
+				delete_point_child = delete_point->left;
+			}
+			else
+			{
+				delete_point_child = m_nullNode;
+			}
+			delete_point_child->parent = delete_point->parent;
+			if (delete_point->parent == m_nullNode)
+			{
+				m_root = delete_point_child;
+				m_nullNode->parent = m_root;
+				m_nullNode->left = m_root;
+				m_nullNode->right = m_root;
+			}
+			else if ( delete_point == delete_point->parent->right )
+			{
+				delete_point->parent->right = delete_point_child;
+			}
+			else
+			{
+				delete_point->parent->left = delete_point_child;
+			}
+			if (delete_point->RB_COLOR == BLACK&& 
+				!(delete_point_child == m_nullNode && delete_point_child->parent == m_nullNode)  )
+			{
+				DeleteFixUp(delete_point_child);
+			}
+			delete delete_point;
+			return true;
+		}
+
+		inline RB_Node* InOrderSuccessor(RB_Node* node)
+		{
+			if (node == m_nullNode)
+			{
+				return m_nullNode;
+			}
+			RB_Node* result = node->right;
+			while (result != m_nullNode) // 查到右子树中最小的节点
+			{
+				if (result->left != m_nullNode)
+					result = result->left;
+				else
+					break;
+			}
+			// 感觉一下代码没什么用！
+			if (result == m_nullNode) //如果右子树中没有最小节点
+			{
+				RB_Node* index = node->parent;
+				result = node;
+				while (index != m_nullNode && result == index->right)
+				{
+					result = index;
+					index = index->parent;
+				}
+				result = index;
+			}
+			return result;
+		}
+
+		// 删除修复 
+		void DeleteFixUp(RB_Node* node)
+		{
+			while (node != m_root && node->RB_COLOR == BLACK)
+			{
+				if (node == node->parent->left)
+				{
+					RB_Node* brother = node->parent->right;
+					// 情况1：当前节点是黑吃黑！兄弟节点是小红粉
+					/*
+					   兄弟节点颜色赋值黑
+					   父节点颜色赋值红
+					   对父节点左旋
+					*/
+					if (brother->RB_COLOR == RED) 
+					{
+						brother->RB_COLOR = BLACK;
+						node->parent->RB_COLOR = RED;
+						RotateLeft(node->parent);
+					}
+					else
+					{
+						// 兄弟节点是黑 ， 兄弟的俩子节点都是黑色
+						/*
+						    父节点颜色赋值 红色
+							当前节点转移到父节点 进入下一次循环
+						*/
+						if (brother->left->RB_COLOR == BLACK && brother->left->RB_COLOR == BLACK) 
+						{
+							node->parent->RB_COLOR = RED;
+							node = node->parent;
+						}
+						// 兄弟节点是黑 ， 兄弟的右子节点是黑色
+						/*
+						兄弟节点颜色赋值  红
+						兄弟的左子节点颜色赋值 黑色
+						对兄弟右旋
+						*/
+						else if (brother->right->RB_COLOR == BLACK)
+						{
+							brother->RB_COLOR = RED;
+							brother->left->RB_COLOR = BLACK;
+							RotateRight(brother);
+						}
+						// 兄弟节点是黑 ， 兄弟的左子节点是红色
+						/*
+						兄弟节点 颜色赋值 父节点颜色
+						父节点颜色赋值黑色
+						兄弟的右子节点颜色赋值黑色
+						对父节点左旋
+						把根节点赋值给当前节点
+						*/
+						else if (brother->right->RB_COLOR == RED)
+						{
+							brother->RB_COLOR = node->parent->RB_COLOR;
+							node->parent->RB_COLOR = BLACK;
+							brother->right->RB_COLOR = BLACK;
+							RotateLeft(node->parent);
+							node = m_root;
+						}
+					}
+				}
+				else // 如果节点是父节点的右子节点
+				{
+					RB_Node* brother = node->parent->left;
+					if (brother->RB_COLOR == RED)
+					{
+						node->parent->RB_COLOR = RED;
+						brother->RB_COLOR = BLACK;
+						RotateRight(node->parent);
+					}
+					else
+					{
+						if (brother->left->RB_COLOR == BLACK && brother->right->RB_COLOR == BLACK)
+						{
+							node->parent->RB_COLOR = RED;
+							node = node->parent;
+						}
+						else if (brother->left->RB_COLOR == BLACK)
+						{
+							brother->RB_COLOR = RED;
+							brother->right->RB_COLOR = BLACK;
+							RotateLeft(brother);
+						}
+						else if (brother->left->RB_COLOR == RED)
+						{
+							brother->RB_COLOR = node->parent->RB_COLOR;
+							node->parent->RB_COLOR = BLACK;
+							brother->left->RB_COLOR = BLACK;
+							RotateRight(node->parent);
+							node = m_root;
+						}
+					}
+				}
+				
+			}
+			m_nullNode->parent = m_root;
+			m_root->RB_COLOR = BLACK;
+		}
+
+		
 };

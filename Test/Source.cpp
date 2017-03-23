@@ -1220,8 +1220,9 @@ void main()
 	RB_Tree<int,int> rbTree;
 	for (int i = 0; i < len;i++)
 	{
-		rbTree.Insert( 10-i,i );
+		rbTree.Insert( i,i );
 	}
+	rbTree.Delete(1);
 	rbTree.printTree();
 	//int len = 10;
 	//AvlTree<int> avlTree;
