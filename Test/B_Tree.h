@@ -1,6 +1,7 @@
 #pragma once
 #include <stack>
 #include <iostream>
+#include <vector>
 using namespace std;
 template<class T>
 class BNode

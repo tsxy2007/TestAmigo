@@ -53,6 +53,8 @@ public:
     T& operator [](int index);
     //删除元素
     T delElement(int index);
+    // 正序插入
+    void insertAscElement(const T& element);
     //修改元素
     void alterElement(const T& newELement,int index);
     //查找元素
@@ -148,6 +150,42 @@ T& LinkedList<T>::operator []( int index )
 {
     T t = GetElement(index);
     return t;
+}
+
+template <typename T>
+T LinkedList<T>::delElement(int index)
+{
+    assert(index>=0&&index<size());
+    Node* p = mHead->mNext;
+    while (index--)
+        p = p->mNext;
+    Node* proi = p->mPret;
+    proi->mNext = p->mNext;
+    p->mNext->mPret = proi;
+    T t = p->mData;
+    delete p;
+    p = NULL;
+    return t;
+}
+
+template <typename T>
+void LinkedList<T>::insertAscElement(const T &element)
+{
+    if ( isEmpty() )
+    {
+        addToLast(element);
+    }
+    else
+    {
+        Node* p = mHead->mNext;
+        while (element>p->mData && p!= mHead)
+            p = p->mNext;
+        Node* pre = p->mPret;
+        Node* item = new Node(element,pre,p);
+        pre->mNext = item;
+        p->mPret = item;
+    }
+   
 }
 
 template <typename T>

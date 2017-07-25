@@ -1415,7 +1415,7 @@ int main()
     
     for (int i = 0 ; i<100; i++)
     {
-        llist.addToLast(i);
+        llist.insertAscElement( i );
 //        std::cout<<"szie = "<<llist.size()<<std::endl;
 //        std::cout<<"end  = "<<llist.getLastElement()<<endl;
     }
@@ -1434,11 +1434,14 @@ int main()
 //    llist.insertElement(10993, 99);
 //    llist.print();
     
+    llist.delElement(98);
     
     for (int i = 0 ; i<llist.size(); i++)
     {
         cout<<"llist["<<i<<"] = "<<llist[i]<<endl;
     }
+    
+    
     
 	system("pause");
 }
