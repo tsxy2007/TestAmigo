@@ -8,6 +8,7 @@
 
 #ifndef LinkedList_h
 #define LinkedList_h
+#include <assert.h>
 
 template <typename T>
 class LinkedList
@@ -18,12 +19,11 @@ private:
     public:
         Node* mPret; //前一个节点
         Node* mNext; //后一个节点
-    private:
-        T* mData;
+        T mData;
     public:
         Node(const T& element,Node*&pri,Node*& next):mData(element),mNext(next),mPret(pri){};
-        Node():mData(data){};
-    }
+        Node():mData(mData){};
+    };
     
     
 public:
@@ -38,7 +38,7 @@ public:
     // 判断是否为空链表
     bool isEmpty()const;
     // 将元素添加到最后
-    void addToLast(T& element);
+    void addToLast(const T& element);
     //获取最后一个元素
     T getLastElement()const;
     //删除最后一个元素
@@ -57,17 +57,52 @@ public:
     int findElement(const T& element)const;
 //    //正序遍历
 //    void Traverse(void (*visit)(T));
+    
+    //打印列表
+    void print()const;
 };
 
 template <typename T>
 int  LinkedList<T>::size( ) const
 {
-//    if ()
-//    {
-//        
-//    }
+    int size = 0 ;
+    for ( Node* p = mHead->mNext ; p != mHead; p=p->mNext)
+        ++size ;
+    
+    return size;
+    
 }
 
+template <typename T>
+bool LinkedList<T>::isEmpty( ) const
+{
+    return mHead->mNext == mHead;
+}
 
+template <typename T>
+void LinkedList<T>::addToLast(const T& element)
+{
+    Node* n = new Node(element,mHead->mPret,mHead);
+    mHead->mPret = mHead->mPret->mNext = n;
+}
+
+template <typename T>
+T LinkedList<T>::getLastElement( ) const
+{
+    assert(!isEmpty());
+    return mHead->mPret->mData;
+}
+
+template <typename T>
+void <#function name#>(<#function parameters#>) {
+    <#statements#>
+}
+
+template <typename T>
+void LinkedList<T>::print( ) const
+{
+    for ( Node* p = mHead->mNext ; p != mHead; p=p->mNext)
+        std::cout<< p->mData<<" size = "<<size()<<std::endl;
+}
 
 #endif /* LinkedList_h */

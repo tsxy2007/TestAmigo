@@ -9,6 +9,7 @@
 #include <stack>
 #include "AVLTree.h"
 #include "RB_Tree.h"
+#include "LinkedList.h"
 #define random(x) (rand()%x)
 using namespace std;
 class X{ };
@@ -1402,6 +1403,24 @@ int main()
 	}
 	show(arr3, high);*/
 
+    
+    LinkedList<int> llist ;
+    
+    
+    std::cout<<"size = "<<llist.size()<<std::endl;
+    if (llist.isEmpty())
+    {
+        std::cout<<"llist is empty"<<endl;
+    }
+    
+    for (int i = 0 ; i<100; i++)
+    {
+        llist.addToLast(i);
+        std::cout<<"szie = "<<llist.size()<<std::endl;
+        std::cout<<"end  = "<<llist.getLastElement()<<endl;
+    }
+    
+    llist.print();
 
 	system("pause");
 }
