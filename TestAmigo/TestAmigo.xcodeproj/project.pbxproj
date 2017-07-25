@@ -30,6 +30,7 @@
 		101C1C771F272F6C00DB5101 /* B_Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = B_Tree.h; path = ../../Test/B_Tree.h; sourceTree = "<group>"; };
 		101C1C781F272F6C00DB5101 /* RB_Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RB_Tree.h; path = ../../Test/RB_Tree.h; sourceTree = "<group>"; };
 		101C1C791F272F6C00DB5101 /* Source.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Source.cpp; path = ../../Test/Source.cpp; sourceTree = "<group>"; };
+		101C1C7C1F27364100DB5101 /* LinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LinkedList.h; path = ../../Test/LinkedList.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +68,7 @@
 				101C1C771F272F6C00DB5101 /* B_Tree.h */,
 				101C1C781F272F6C00DB5101 /* RB_Tree.h */,
 				101C1C791F272F6C00DB5101 /* Source.cpp */,
+				101C1C7C1F27364100DB5101 /* LinkedList.h */,
 			);
 			path = TestAmigo;
 			sourceTree = "<group>";
