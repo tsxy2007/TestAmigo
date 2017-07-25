@@ -49,6 +49,8 @@ public:
     void insertElement(const T& element,int position);
     //获取元素
     T GetElement(int index)const;
+    //重载[]方法
+    T& operator [](int index);
     //删除元素
     T delElement(int index);
     //修改元素
@@ -94,15 +96,66 @@ T LinkedList<T>::getLastElement( ) const
 }
 
 template <typename T>
-void <#function name#>(<#function parameters#>) {
-    <#statements#>
+void LinkedList<T>::deleteLastEmlent( )
+{
+    Node* pLast = mHead->mPret;
+    pLast->mPret->mNext = mHead;
+    mHead->mPret = pLast->mPret;
+    delete pLast;
+    pLast = NULL;
+}
+
+template <typename T>
+void LinkedList<T>::alterLastElement(const T& element)
+{
+    assert(!isEmpty());
+    mHead->mPret->mData = element;
+}
+
+template <typename T>
+void LinkedList<T>::insertElement(const T& element,int position)
+{
+    assert(position>=0 && position < size());
+    int index = 0;
+    for (Node* p = mHead->mNext; p != mHead; p = p->mNext )
+    {
+        if (position == index)
+        {
+            Node* prior = p->mPret;
+            Node* item = new Node( element,prior,p );
+            prior->mNext = item;
+            p->mPret = item;
+        }
+        index ++ ;
+    }
+}
+
+template <typename T>
+T LinkedList<T>::GetElement( int index ) const
+{
+    assert(index >= 0 && index < size());
+    Node* p = mHead->mNext;
+    while (index)
+    {
+        p = p->mNext;
+        index -- ;
+    }
+    return p->mData;
+}
+
+template <typename T>
+T& LinkedList<T>::operator []( int index )
+{
+    T t = GetElement(index);
+    return t;
 }
 
 template <typename T>
 void LinkedList<T>::print( ) const
 {
+    int index = 0 ;
     for ( Node* p = mHead->mNext ; p != mHead; p=p->mNext)
-        std::cout<< p->mData<<" size = "<<size()<<std::endl;
+        std::cout<< p->mData<<" index = "<<index ++<<std::endl;
 }
 
 #endif /* LinkedList_h */

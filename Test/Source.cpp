@@ -1416,11 +1416,29 @@ int main()
     for (int i = 0 ; i<100; i++)
     {
         llist.addToLast(i);
-        std::cout<<"szie = "<<llist.size()<<std::endl;
-        std::cout<<"end  = "<<llist.getLastElement()<<endl;
+//        std::cout<<"szie = "<<llist.size()<<std::endl;
+//        std::cout<<"end  = "<<llist.getLastElement()<<endl;
+    }
+//    llist.alterLastElement(100);
+//    llist.print();
+//    llist.deleteLastEmlent();
+//    llist.print();
+//    llist.deleteLastEmlent();
+//    llist.print();
+    
+//    llist.insertElement(1001, 0);
+//    llist.print();
+    
+//    llist.insertElement(1002, 50);
+//    llist.print();
+//    llist.insertElement(10993, 99);
+//    llist.print();
+    
+    
+    for (int i = 0 ; i<llist.size(); i++)
+    {
+        cout<<"llist["<<i<<"] = "<<llist[i]<<endl;
     }
     
-    llist.print();
-
 	system("pause");
 }
