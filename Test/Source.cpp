@@ -1,7 +1,7 @@
 #include <iostream>
-#include <windows.h>  
-#include <stdio.h>  
-#include <Mmsystem.h> //声明的头文件  
+//#include <windows.h>  
+#include <stdio.h>
+//#include <Mmsystem.h> //声明的头文件  
 #include <algorithm>
 #include <random>
 #include <queue>
@@ -227,12 +227,12 @@ void quickSort(int* data,int low ,int high)
 void sort(int* arr,int lenght)
 {
 
-	LARGE_INTEGER freq_;
-	QueryPerformanceFrequency(&freq_);
-
-	LARGE_INTEGER begin_time;
-	LARGE_INTEGER end_time;
-	QueryPerformanceCounter(&begin_time);
+//	LARGE_INTEGER freq_;
+//	QueryPerformanceFrequency(&freq_);
+//
+//	LARGE_INTEGER begin_time;
+//	LARGE_INTEGER end_time;
+//	QueryPerformanceCounter(&begin_time);
 	
 	
 	// 冒泡排序
@@ -289,12 +289,12 @@ void sort(int* arr,int lenght)
 	// 快速排序
 	quickSort(arr, 0, lenght - 1);
 
-
-	QueryPerformanceCounter(&end_time);
-
-	double ns_time = (end_time.QuadPart - begin_time.QuadPart) * 1000000.0 / freq_.QuadPart;
-
-	cout << "ns_time = " << ns_time << endl;
+//
+//	QueryPerformanceCounter(&end_time);
+//
+//	double ns_time = (end_time.QuadPart - begin_time.QuadPart) * 1000000.0 / freq_.QuadPart;
+//
+//	cout << "ns_time = " << ns_time << endl;
 
 
 }
@@ -823,7 +823,7 @@ void PList<T>::insert(T x, PNode1<T>* p)
 	pNode->pNext = p->pNext;
 	p->pNext = pNode;
 	if (pNode->pNext == NULL)//如果node为尾节点
-		pLastNode = pNode;
+		pLNode = pNode;
 	iLen++;
 }
 
@@ -1186,7 +1186,7 @@ TList<T>::TList():pBNode(NULL)
 
 }
 
-void main() 
+int main() 
 {
 
 	/*int x = sizeof(X);

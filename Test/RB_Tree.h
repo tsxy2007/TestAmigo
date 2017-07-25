@@ -106,7 +106,8 @@ public:
 			}
 
 			InsertFixUp(insert_node);
-		}
+            return true;
+        };
 
 		// ²åÈëÐÞ¸´ºìºÚÊ÷
 		void InsertFixUp(RB_Node* node)
@@ -166,7 +167,7 @@ public:
 				}
 			}
 			m_root->RB_COLOR = BLACK;
-		}
+        };
 		//×óÐý´úÂëÊµÏÖ    
 		bool RotateLeft(RB_Node* node)
 		{
@@ -201,7 +202,9 @@ public:
 			}
 			node->parent = lower_right;
 			lower_right->left = node;
-		}
+            
+            return true;
+        };
 
 		// ÓÒÐý
 		bool RotateRight(RB_Node* node)

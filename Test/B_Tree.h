@@ -1,5 +1,6 @@
 #pragma once
 #include <stack>
+#include <iostream>
 using namespace std;
 template<class T>
 class BNode

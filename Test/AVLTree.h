@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <stdio.h>  
+#include <iostream>
+using namespace std;
 template <class T>
 class AVLNode
 {
@@ -153,7 +155,7 @@ void AvlTree<T>::Delete(T value)
 template < typename T>
 void AvlTree<T>::h_travl()
 {
-	stack<AVLNode<T>*> s;
+	std::stack<AVLNode<T>*> s;
 	AVLNode<T>* itr = root,*pre = NULL;
 	s.push(root);
 	while (!s.empty())
